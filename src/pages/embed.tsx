@@ -40,13 +40,12 @@ const TimerEmbed: React.FC = () => {
   const isValidDate = useMemo(() => /\d{8},\d{6}/.test(date), [date]);
 
   const getTimeDigit = useCallback((unit: string) => {
-    return () => getRemainingTime(date, unit).toString().padStart(2, '0');
+    return () => getRemainingTime(date, unit as 'day' | 'hour' | 'minute' | 'second').toString().padStart(2, '0');
   }, [date]);
 
-  const getMiliseconds = useCallback(() => {
-    return Math.round(getRemainingTime(date, 'milisecond') / 10)
+  const getMilliseconds = useCallback(() => {
+    return Math.round(getRemainingTime(date, 'milisecond', true) % 100)
       .toString()
-      .slice(0, 2)
       .padStart(2, '0');
   }, [date]);
 
@@ -66,7 +65,7 @@ const TimerEmbed: React.FC = () => {
               .
               <Digit
                 ignoreBlink
-                getter={getMiliseconds}
+                getter={getMilliseconds}
                 style={{ textAlign: 'left', fontSize: '0.5em', margin: 5, width: '20px' }}
               />
             </div>
